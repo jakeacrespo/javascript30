@@ -58,21 +58,37 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
-  function playDrumKit(e){
-    const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
-    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-    if (!audio) { return; }
-    key.classList.add('playing');
-    audio.currentTime = 0;
-    audio.play();
+  let key = document.getElementsByClassName('key');
+  let audio = document.getElementsByTagName('audio');
+  for (let i=0; i<audio.length; i++) {
+    audio[i].addEventListener('ended', function() {
+      removePlayingClass();
+    });
+  };
+
+  function removePlayingClass() {
+    for (let i=0; i<key.length; i++) {
+      key[i].className = key[i].className.replace('playing', '');
+    }
   }
-  function removeTransitionend(e){
-    if (e.propertyName != 'transform') {return;}
-    e.target.classList.remove('playing');
-  }
-  window.addEventListener('keydown', playDrumKit);
-  const keys = Array.from(document.querySelectorAll('.key'));
-  keys.forEach(key => addEventListener('transitionend', removeTransitionend) );
+  function playKit(code) {
+    for (let i=0; i<audio.length; i++) {
+      if (audio[i].dataset.key == code) {
+        audio[i].play();
+        break;
+      }
+    }
+  };
+  function playDrum(k) {
+    for (let i=0; i<key.length; i++) {
+      if (key[i].dataset.key == k.keyCode) {
+        key[i].className = key[i].className.concat(' playing');
+        playKit(k.keyCode);
+        break;
+      }
+    }
+  };
+  document.addEventListener('keydown', function(key) { playDrum(key) });
 </script>
 
 
