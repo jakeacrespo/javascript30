@@ -26,6 +26,9 @@
     .panels {
       min-height: 100vh;
       overflow: hidden;
+
+      display: flex;
+      flex-direction: row;
     }
 
     .panel {
@@ -43,6 +46,11 @@
       font-size: 20px;
       background-size: cover;
       background-position: center;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 1;
     }
 
     .panel1 { background-image:url(https://source.unsplash.com/gYl-UtwNg_I/1500x1500); }
@@ -56,21 +64,40 @@
       margin: 0;
       width: 100%;
       transition: transform 0.5s;
+
+      border: 1px solid red;
+
+      display: flex;
+      flex: 1 0 auto;
+      justify-content: center;
+      align-items: center;
     }
 
+    .panel > *:first-child {
+      transform: translateY(-100%);
+      font-size: 1px;
+    }
+    .panel.open-active > *:first-child {
+      transform: translateY(0);
+      font-size: 1em;
+    }
+    .panel > *:last-child {
+      transform: translateY(100%);
+      font-size: 1px;
+    }
+    .panel.open-active > *:last-child {
+      transform: translateY(0);
+      font-size: 1em;
+    }
     .panel p {
       text-transform: uppercase;
       font-family: 'Amatic SC', cursive;
       text-shadow: 0 0 4px rgba(0, 0, 0, 0.72), 0 0 14px rgba(0, 0, 0, 0.45);
       font-size: 2em;
     }
-    
-    .panel p:nth-child(2) {
-      font-size: 4em;
-    }
-
     .panel.open {
-      font-size: 40px;
+      font-size: 72px;
+      flex: 20;
     }
 
   </style>
@@ -78,9 +105,10 @@
 
   <div class="panels">
     <div class="panel panel1">
-      <p>Hey</p>
-      <p>Let's</p>
-      <p>Dance</p>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi, quaerat delectus.
+          Reprehenderit commodi nesciunt hic officiis quod aliquam quas similique quos dolorum ...</p>
+      <p></p>
+      <p></p>
     </div>
     <div class="panel panel2">
       <p>Give</p>
@@ -88,9 +116,10 @@
       <p>Receive</p>
     </div>
     <div class="panel panel3">
-      <p>Experience</p>
-      <p>It</p>
-      <p>Today</p>
+      <p></p>
+      <p></p>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi, quaerat delectus.
+          Reprehenderit commodi nesciunt hic officiis quod aliquam quas similique quos dolorum ...</p>
     </div>
     <div class="panel panel4">
       <p>Give</p>
@@ -105,7 +134,23 @@
   </div>
 
   <script>
-
+    const panels = document.querySelectorAll('.panel');
+    function openPanel() {
+      const openedPanels = document.querySelectorAll('.open');
+      if (openedPanels.length >= 1) {
+        openedPanels.forEach(panel => {
+          panel.classList.remove('open');
+        });
+      }
+      this.classList.toggle('open');
+    }
+    function closePanel(e) {
+      if (e.propertyName.includes('flex')) {
+        this.classList.toggle('open-active');
+      }
+    }
+    panels.forEach(panel => panel.addEventListener('click', openPanel));
+    panels.forEach(panel => panel.addEventListener('transitionend', closePanel));
   </script>
 
 
